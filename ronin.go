@@ -1,35 +1,35 @@
 package main
 
 import (
-  "log"
-  "github.com/howeyc/fsnotify"
+	"github.com/howeyc/fsnotify"
+	"log"
 )
 
 func main() {
-  watcher, err := fsnotify.NewWatcher()
-  if err != nil {
-    log.Fatal(err)
-  }
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		log.Fatal(err)
+	}
 
-  done := make(chan bool)
+	done := make(chan bool)
 
-  go func() {
-    for {
-      select {
-        case event := <-watcher.Event:
-          log.Println("event:", event)
-        case err := <-watcher.Error:
-          log.Println("error:", err)
-      }
-    }
-  }()
+	go func() {
+		for {
+			select {
+			case event := <-watcher.Event:
+				log.Println("event:", event)
+			case err := <-watcher.Error:
+				log.Println("error:", err)
+			}
+		}
+	}()
 
-  err = watcher.Watch("./test")
-  if err != nil {
-    log.Fatal(err)
-  }
+	err = watcher.Watch("./test")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-  <-done
+	<-done
 
-  watcher.Close()
+	watcher.Close()
 }
